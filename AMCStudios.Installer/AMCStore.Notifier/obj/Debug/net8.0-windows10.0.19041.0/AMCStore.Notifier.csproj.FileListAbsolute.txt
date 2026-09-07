@@ -1,0 +1,25 @@
+E:\source afaing\AMCStudios.Installer\AMCStore.Notifier\bin\Debug\net8.0-windows10.0.19041.0\AMCStore.Notifier.exe
+E:\source afaing\AMCStudios.Installer\AMCStore.Notifier\bin\Debug\net8.0-windows10.0.19041.0\AMCStore.Notifier.deps.json
+E:\source afaing\AMCStudios.Installer\AMCStore.Notifier\bin\Debug\net8.0-windows10.0.19041.0\AMCStore.Notifier.runtimeconfig.json
+E:\source afaing\AMCStudios.Installer\AMCStore.Notifier\bin\Debug\net8.0-windows10.0.19041.0\AMCStore.Notifier.dll
+E:\source afaing\AMCStudios.Installer\AMCStore.Notifier\bin\Debug\net8.0-windows10.0.19041.0\AMCStore.Notifier.pdb
+E:\source afaing\AMCStudios.Installer\AMCStore.Notifier\bin\Debug\net8.0-windows10.0.19041.0\Microsoft.Toolkit.Uwp.Notifications.dll
+E:\source afaing\AMCStudios.Installer\AMCStore.Notifier\bin\Debug\net8.0-windows10.0.19041.0\Microsoft.Windows.SDK.NET.dll
+E:\source afaing\AMCStudios.Installer\AMCStore.Notifier\bin\Debug\net8.0-windows10.0.19041.0\WinRT.Runtime.dll
+E:\source afaing\AMCStudios.Installer\AMCStore.Notifier\obj\Debug\net8.0-windows10.0.19041.0\AMCStore.Notifier.csproj.AssemblyReference.cache
+E:\source afaing\AMCStudios.Installer\AMCStore.Notifier\obj\Debug\net8.0-windows10.0.19041.0\AMCStore.Notifier.GeneratedMSBuildEditorConfig.editorconfig
+E:\source afaing\AMCStudios.Installer\AMCStore.Notifier\obj\Debug\net8.0-windows10.0.19041.0\AMCStore.Notifier.AssemblyInfoInputs.cache
+E:\source afaing\AMCStudios.Installer\AMCStore.Notifier\obj\Debug\net8.0-windows10.0.19041.0\AMCStore.Notifier.AssemblyInfo.cs
+E:\source afaing\AMCStudios.Installer\AMCStore.Notifier\obj\Debug\net8.0-windows10.0.19041.0\AMCStore.Notifier.csproj.CoreCompileInputs.cache
+E:\source afaing\AMCStudios.Installer\AMCStore.Notifier\obj\Debug\net8.0-windows10.0.19041.0\AMCStore.308C9B23.Up2Date
+E:\source afaing\AMCStudios.Installer\AMCStore.Notifier\obj\Debug\net8.0-windows10.0.19041.0\AMCStore.Notifier.dll
+E:\source afaing\AMCStudios.Installer\AMCStore.Notifier\obj\Debug\net8.0-windows10.0.19041.0\refint\AMCStore.Notifier.dll
+E:\source afaing\AMCStudios.Installer\AMCStore.Notifier\obj\Debug\net8.0-windows10.0.19041.0\AMCStore.Notifier.pdb
+E:\source afaing\AMCStudios.Installer\AMCStore.Notifier\obj\Debug\net8.0-windows10.0.19041.0\AMCStore.Notifier.genruntimeconfig.cache
+E:\source afaing\AMCStudios.Installer\AMCStore.Notifier\obj\Debug\net8.0-windows10.0.19041.0\ref\AMCStore.Notifier.dll
+C:\Users\TIKITI~1\AppData\Local\Temp\opencode\amcbuild\AMCStore.Notifier.exe
+C:\Users\TIKITI~1\AppData\Local\Temp\opencode\amcbuild\AMCStore.Notifier.dll
+C:\Users\TIKITI~1\AppData\Local\Temp\opencode\amcbuild\AMCStore.Notifier.pdb
+C:\Users\TIKITI~1\AppData\Local\Temp\opencode\amcbuild-installer\AMCStore.Notifier.exe
+C:\Users\TIKITI~1\AppData\Local\Temp\opencode\amcbuild-installer\AMCStore.Notifier.dll
+C:\Users\TIKITI~1\AppData\Local\Temp\opencode\amcbuild-installer\AMCStore.Notifier.pdb
