@@ -1,8 +1,5 @@
-using System;
-
 namespace AMCStore.Notifier
 {
-
     public static class ApiConfig
     {
         public const string ApiBaseUrl = "https://acutebunny.pythonanywhere.com";

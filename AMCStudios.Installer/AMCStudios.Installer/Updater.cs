@@ -1,10 +1,6 @@
-using System;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
 
 namespace AMCStudios.Installer
 {
@@ -240,8 +236,12 @@ namespace AMCStudios.Installer
 
         private static void LogCrashSafe(Exception ex)
         {
-            try { File.AppendAllText(Path.Combine(AppPrefs.DataRoot, "crash.log"),
-                $"{DateTime.UtcNow:O} updater: {ex}\r\n"); } catch { }
+            try
+            {
+                File.AppendAllText(Path.Combine(AppPrefs.DataRoot, "crash.log"),
+                $"{DateTime.UtcNow:O} updater: {ex}\r\n");
+            }
+            catch { }
         }
     }
 }

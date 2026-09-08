@@ -1,17 +1,12 @@
-using System;
+using Newtonsoft.Json;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using Newtonsoft.Json;
 
 namespace AMCStudios.Installer
 {
@@ -629,7 +624,6 @@ namespace AMCStudios.Installer
             catch { return new List<UserSearchResult>(); }
         }
 
-
         public static async Task<List<KlipyGif>> KlipyTrendingAsync(int limit = 24)
         {
             try
@@ -655,7 +649,6 @@ namespace AMCStudios.Installer
             }
             catch { return (new List<KlipyGif>(), "No connection to the GIF service."); }
         }
-
 
         public static async Task<string> CreateGroupAsync(string name, IEnumerable<string> members)
         {

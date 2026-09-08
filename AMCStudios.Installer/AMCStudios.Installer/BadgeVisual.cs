@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -19,9 +17,6 @@ namespace AMCStudios.Installer
         public const string PopularBadge = "popular";
         public const string TyBadge = "ty";
 
-
-
-
         private static readonly string[] Hierarchy =
         {
             TyBadge, OwnerBadge, AmcDevBadge, ModDevBadge, OfficialBadge,
@@ -36,9 +31,6 @@ namespace AMCStudios.Installer
         public static readonly System.Windows.Media.Color BugHunterColor = System.Windows.Media.Color.FromRgb(0x43, 0xA0, 0x47);
         public static readonly System.Windows.Media.Color PopularColor = System.Windows.Media.Color.FromRgb(0xE6, 0xE6, 0xE6);
         public static readonly System.Windows.Media.Color TyPink = System.Windows.Media.Color.FromRgb(0xFF, 0x5C, 0xA0);
-
-
-
 
         private static readonly LinearGradientBrush TyOceanBrush = CreateTyOceanBrush();
 
@@ -59,7 +51,6 @@ namespace AMCStudios.Installer
                 new GradientStop(TyPink, 1.00),
             };
             foreach (var s in stops) brush.GradientStops.Add(s);
-
 
             var duration = new Duration(TimeSpan.FromSeconds(2.5));
             foreach (var s in stops)
@@ -205,7 +196,6 @@ namespace AMCStudios.Installer
             return Host(path, 15, 15);
         }
 
-
         private static FrameworkElement MakeCheck(SolidColorBrush brush)
         {
             var path = new Path
@@ -220,7 +210,6 @@ namespace AMCStudios.Installer
             };
             return Host(path, 15, 15);
         }
-
 
         private static FrameworkElement MakeBadgeCheck(SolidColorBrush brush)
         {
@@ -257,7 +246,6 @@ namespace AMCStudios.Installer
             return Host(path, 16, 16);
         }
 
-
         private static FrameworkElement MakeHeart()
         {
             var glow = new System.Windows.Media.Effects.DropShadowEffect
@@ -279,7 +267,6 @@ namespace AMCStudios.Installer
             return Host(path, 15, 15);
         }
 
-
         private static FrameworkElement MakeBug(SolidColorBrush brush)
         {
             var grid = new Grid { Width = 15, Height = 15 };
@@ -293,7 +280,6 @@ namespace AMCStudios.Installer
                 VerticalAlignment = VerticalAlignment.Center
             };
 
-
             var ant = new Path
             {
                 Data = Geometry.Parse("M5.5,2.5 C4,4 4,5 5,6.5 M9.5,2.5 C11,4 11,5 10,6.5"),
@@ -304,7 +290,6 @@ namespace AMCStudios.Installer
                 HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center
             };
-
 
             var eyes = new StackPanel { Orientation = System.Windows.Controls.Orientation.Horizontal, HorizontalAlignment = System.Windows.HorizontalAlignment.Center };
             var eyeL = new Ellipse { Fill = System.Windows.Media.Brushes.White, Width = 1.7, Height = 1.7, Margin = new Thickness(0, 2.4, 1.4, 0) };

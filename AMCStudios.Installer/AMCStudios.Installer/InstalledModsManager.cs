@@ -1,11 +1,6 @@
-using System;
-using System.Collections.Generic;
+using Newtonsoft.Json;
 using System.IO;
 using System.IO.Compression;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
 
 namespace AMCStudios.Installer
 {
@@ -236,6 +231,7 @@ namespace AMCStudios.Installer
     public static class BepInExInstaller
     {
         public const string Version = "5.4.23.3";
+
         public const string DownloadUrl =
             "https://github.com/BepInEx/BepInEx/releases/download/v5.4.23.3/BepInEx_win_x64_5.4.23.3.zip";
 

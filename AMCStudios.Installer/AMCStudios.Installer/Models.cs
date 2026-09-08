@@ -1,9 +1,7 @@
-using System;
-using System.Collections.Generic;
+using Newtonsoft.Json;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Media;
-using Newtonsoft.Json;
 
 namespace AMCStudios.Installer
 {
@@ -79,6 +77,7 @@ namespace AMCStudios.Installer
         [JsonIgnore] public string JoinedText => JoinedTs > 0 ? new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(JoinedTs).ToString("MMMM yyyy") : "";
 
         private ImageSource _avatarImage;
+
         [JsonIgnore]
         public ImageSource AvatarImage
         {
@@ -87,6 +86,7 @@ namespace AMCStudios.Installer
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
         protected void OnPropertyChanged(string n) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(n));
     }
 
@@ -100,6 +100,7 @@ namespace AMCStudios.Installer
         [JsonProperty("avatar_url")] public string AvatarUrl { get; set; } = "";
 
         private ImageSource _avatarImage;
+
         [JsonIgnore]
         public ImageSource AvatarImage
         {
@@ -107,7 +108,8 @@ namespace AMCStudios.Installer
             set { if (!ReferenceEquals(_avatarImage, value)) { _avatarImage = value; OnPropertyChanged(nameof(AvatarImage)); } }
         }
 
-        [JsonIgnore] public string TimeText
+        [JsonIgnore]
+        public string TimeText
         {
             get
             {
@@ -120,7 +122,9 @@ namespace AMCStudios.Installer
         }
 
         [JsonIgnore] public bool HasBadge => Badges.Count > 0;
-        [JsonIgnore] public string BadgeIcon
+
+        [JsonIgnore]
+        public string BadgeIcon
         {
             get
             {
@@ -131,7 +135,9 @@ namespace AMCStudios.Installer
                 return "";
             }
         }
-        [JsonIgnore] public string TierLabel
+
+        [JsonIgnore]
+        public string TierLabel
         {
             get
             {
@@ -142,7 +148,9 @@ namespace AMCStudios.Installer
                 return "";
             }
         }
-        [JsonIgnore] public System.Windows.Media.Brush TierBrush
+
+        [JsonIgnore]
+        public System.Windows.Media.Brush TierBrush
         {
             get
             {
@@ -159,6 +167,7 @@ namespace AMCStudios.Installer
         private static readonly System.Windows.Media.Brush TyBrush = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(0xFF, 0x5C, 0xA0));
 
         public event PropertyChangedEventHandler PropertyChanged;
+
         protected void OnPropertyChanged(string n) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(n));
     }
 
@@ -307,7 +316,8 @@ namespace AMCStudios.Installer
 
         [JsonIgnore] public bool HasConfig => !string.IsNullOrWhiteSpace(ConfigUrl);
 
-        [JsonIgnore] public string ConfigDisplayName =>
+        [JsonIgnore]
+        public string ConfigDisplayName =>
             !string.IsNullOrWhiteSpace(ConfigName) ? ConfigName
             : (!string.IsNullOrWhiteSpace(ConfigUrl) ? ConfigUrl.Substring(ConfigUrl.LastIndexOf('/') + 1) : "");
 
@@ -319,7 +329,8 @@ namespace AMCStudios.Installer
         [JsonIgnore] public string SubscribedText => _subscribed ? "★ SUBSCRIBED" : "☆ SUBSCRIBE";
         [JsonIgnore] public string Initial => string.IsNullOrEmpty(Name) ? "?" : Name.Substring(0, 1).ToUpperInvariant();
 
-        [JsonIgnore] public string UploadedAtText
+        [JsonIgnore]
+        public string UploadedAtText
         {
             get
             {
@@ -384,10 +395,13 @@ namespace AMCStudios.Installer
         public string Name { get => _name; set => Set(ref _name, value); }
         public string Creator { get => _creator; set => Set(ref _creator, value); }
         public string Version { get => _version; set => Set(ref _version, value); }
-        public string IconPath { get => _iconPath; set { if (Set(ref _iconPath, value)) Raise(nameof(IconImage)); } }
-        public DateTime InstalledAtUtc { get => _installedAtUtc; set { if (Set(ref _installedAtUtc, value)) Raise(nameof(InstalledAtText)); } }
+        public string IconPath
+        { get => _iconPath; set { if (Set(ref _iconPath, value)) Raise(nameof(IconImage)); } }
+        public DateTime InstalledAtUtc
+        { get => _installedAtUtc; set { if (Set(ref _installedAtUtc, value)) Raise(nameof(InstalledAtText)); } }
         public string InstallFolder { get => _installFolder; set => Set(ref _installFolder, value); }
-        public long SizeBytes { get => _sizeBytes; set { if (Set(ref _sizeBytes, value)) Raise(nameof(SizeText)); } }
+        public long SizeBytes
+        { get => _sizeBytes; set { if (Set(ref _sizeBytes, value)) Raise(nameof(SizeText)); } }
         public string ConfigFileName { get => _configFileName; set => Set(ref _configFileName, value); }
 
         [JsonIgnore] public ImageSource IconImage => ImageCache.LoadFromFile(IconPath);
@@ -441,7 +455,9 @@ namespace AMCStudios.Installer
         [JsonIgnore] public bool IsMedia => Kind == "media";
         [JsonIgnore] public bool HasMedia => IsGif || IsMedia;
         [JsonIgnore] public string GifUrl => IsGif ? (Meta.TryGetValue("gif_url", out var u) ? u : "") : "";
-        [JsonIgnore] public Uri GifUri
+
+        [JsonIgnore]
+        public Uri GifUri
         {
             get
             {
@@ -450,9 +466,11 @@ namespace AMCStudios.Installer
                 return Uri.TryCreate(url, UriKind.Absolute, out var uri) ? uri : null;
             }
         }
+
         [JsonIgnore] public string Initial => string.IsNullOrEmpty(User) ? "?" : User.Substring(0, 1).ToUpperInvariant();
 
         private ImageSource _avatarImage;
+
         [JsonIgnore]
         public ImageSource AvatarImage
         {
@@ -461,6 +479,7 @@ namespace AMCStudios.Installer
         }
 
         private ImageSource _gifImage;
+
         [JsonIgnore]
         public ImageSource GifImage
         {
@@ -468,7 +487,8 @@ namespace AMCStudios.Installer
             set { if (!ReferenceEquals(_gifImage, value)) { _gifImage = value; OnPropertyChanged(nameof(GifImage)); } }
         }
 
-        [JsonIgnore] public string TimeText
+        [JsonIgnore]
+        public string TimeText
         {
             get
             {
@@ -481,7 +501,9 @@ namespace AMCStudios.Installer
         }
 
         [JsonIgnore] public bool HasBadge => Badges.Count > 0;
-        [JsonIgnore] public string BadgeIcon
+
+        [JsonIgnore]
+        public string BadgeIcon
         {
             get
             {
@@ -492,7 +514,9 @@ namespace AMCStudios.Installer
                 return "";
             }
         }
-        [JsonIgnore] public string TierLabel
+
+        [JsonIgnore]
+        public string TierLabel
         {
             get
             {
@@ -505,6 +529,7 @@ namespace AMCStudios.Installer
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
         protected void OnPropertyChanged(string n) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(n));
     }
 
@@ -530,6 +555,7 @@ namespace AMCStudios.Installer
         [JsonIgnore] public string Initial => string.IsNullOrEmpty(User) ? "?" : User.Substring(0, 1).ToUpperInvariant();
 
         private ImageSource _avatarImage;
+
         [JsonIgnore]
         public ImageSource AvatarImage
         {
@@ -538,6 +564,7 @@ namespace AMCStudios.Installer
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
         protected void OnPropertyChanged(string n) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(n));
     }
 
@@ -551,7 +578,9 @@ namespace AMCStudios.Installer
     {
         [JsonProperty("user")] public string User { get; set; } = "";
         [JsonIgnore] public bool Selected { get; set; }
+
         public event PropertyChangedEventHandler PropertyChanged;
+
         protected void OnPropertyChanged(string n) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(n));
     }
 
@@ -574,16 +603,21 @@ namespace AMCStudios.Installer
         [JsonProperty("name")] public string Name { get; set; } = "";
         [JsonProperty("member_count")] public int MemberCount { get; set; }
 
-        [JsonIgnore] public string Initial => IsGroup
+        [JsonIgnore]
+        public string Initial => IsGroup
             ? (string.IsNullOrEmpty(Name) ? "#" : Name.Substring(0, 1).ToUpperInvariant())
             : (string.IsNullOrEmpty(User) ? "?" : User.Substring(0, 1).ToUpperInvariant());
+
         [JsonIgnore] public string LastPreview => Kind == "gif" ? "[GIF]" : Kind == "media" ? "[IMAGE]" : LastText;
         [JsonIgnore] public string DisplayName => IsGroup ? Name : ("@" + User);
-        [JsonIgnore] public string SubLabel => IsGroup
+
+        [JsonIgnore]
+        public string SubLabel => IsGroup
             ? (MemberCount + (MemberCount == 1 ? " member" : " members"))
             : "Direct message";
 
         private ImageSource _avatarImage;
+
         [JsonIgnore]
         public ImageSource AvatarImage
         {
@@ -592,6 +626,7 @@ namespace AMCStudios.Installer
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
         protected void OnPropertyChanged(string n) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(n));
     }
 
@@ -619,6 +654,7 @@ namespace AMCStudios.Installer
         [JsonIgnore] public string LastPreview => Kind == "gif" ? "[GIF]" : Kind == "media" ? "[IMAGE]" : LastText;
 
         public event PropertyChangedEventHandler PropertyChanged;
+
         protected void OnPropertyChanged(string n) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(n));
     }
 
@@ -726,7 +762,8 @@ namespace AMCStudios.Installer
             return "";
         }
 
-        [JsonIgnore] public Uri PreviewUri
+        [JsonIgnore]
+        public Uri PreviewUri
         {
             get
             {
@@ -736,7 +773,9 @@ namespace AMCStudios.Installer
         }
 
         [JsonIgnore] public string SendUrl => PickUrl("mediumgif", "gif");
-        [JsonIgnore] public int PreviewWidth
+
+        [JsonIgnore]
+        public int PreviewWidth
         {
             get
             {
@@ -747,7 +786,9 @@ namespace AMCStudios.Installer
                 return 320;
             }
         }
-        [JsonIgnore] public int PreviewHeight
+
+        [JsonIgnore]
+        public int PreviewHeight
         {
             get
             {

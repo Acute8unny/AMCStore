@@ -1,18 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace AMCStore.Notifier
 {
-
     public class NotifItem
     {
         public string type { get; set; } = "";
@@ -42,11 +34,6 @@ namespace AMCStore.Notifier
         public string Version { get; set; } = "";
         public string Creator { get; set; } = "";
     }
-
-
-
-
-
 
     public class NotifierWorker : IDisposable
     {
@@ -88,12 +75,6 @@ namespace AMCStore.Notifier
             _timer?.Dispose();
             _timer = null;
         }
-
-
-
-
-
-
 
         public string NotifyTest(string title, string body)
         {
@@ -138,24 +119,18 @@ namespace AMCStore.Notifier
             _busy = true;
             try
             {
-
                 _cfg = NotifierConfig.Load();
 
                 bool dnd = _cfg.DoNotDisturb;
                 string token = "";
                 string username = "";
 
-
-
                 ResolveSession(ref token, ref username);
                 bool signedIn = !string.IsNullOrWhiteSpace(token) && !string.IsNullOrWhiteSpace(username);
 
                 ConsumeTestNotification();
 
-
                 await CheckServerStatusAsync();
-
-
 
                 if (!_startupNotified)
                 {
@@ -165,7 +140,6 @@ namespace AMCStore.Notifier
 
                 var items = new List<NotifItem>();
                 var launcherUpdates = new List<NotifItem>();
-
 
                 if (signedIn)
                 {
@@ -182,7 +156,6 @@ namespace AMCStore.Notifier
                     }
                 }
 
-
                 if (launcherUpdates.Count == 0)
                 {
                     var lu = await CheckLauncherUpdateAsync(_cfg.InstalledVersion);
@@ -192,7 +165,6 @@ namespace AMCStore.Notifier
                         if (lu.ts > _cfg.LastSeenTs) _cfg.LastSeenTs = lu.ts;
                     }
                 }
-
 
                 bool launcherDriving = _cfg.UpdateState == "updating" || _cfg.UpdateState == "downloading";
                 double nowSec = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
@@ -244,14 +216,9 @@ namespace AMCStore.Notifier
                     }
                 }
 
-
                 bool appOpen = IsStoreRunning();
 
-
                 bool notifyActivity = !(appOpen && !_cfg.NotifyWhenAppOpen);
-
-
-
 
                 if (!dnd && notifyActivity)
                 {
@@ -266,7 +233,6 @@ namespace AMCStore.Notifier
                     string sig = Signature(n);
                     if (NotifyNew(n, sig))
                     {
-
                         NotifyUser(Title(n), Text(n));
                     }
                 }
@@ -275,7 +241,6 @@ namespace AMCStore.Notifier
             }
             catch
             {
-
             }
             finally
             {
@@ -326,11 +291,6 @@ namespace AMCStore.Notifier
             catch { return null; }
         }
 
-
-
-
-
-
         private async Task ApplyLauncherUpdateAsync(NotifItem lu)
         {
             try
@@ -349,13 +309,10 @@ namespace AMCStore.Notifier
 
                 if (!started)
                 {
-
                     ResetUpdateState(idle: true);
                 }
                 else
                 {
-
-
                     _cfg.UpdateState = "updating";
                     _cfg.UpdateToVersion = lu.version ?? "";
                     _cfg.Save();
@@ -468,7 +425,6 @@ namespace AMCStore.Notifier
             username = _cfg.Username;
             if (!string.IsNullOrWhiteSpace(token)) return;
 
-
             try
             {
                 var path = Path.Combine(NotifierConfig.EnvDataDir, "prefs.json");
@@ -505,11 +461,6 @@ namespace AMCStore.Notifier
             catch { }
         }
 
-
-
-
-
-
         private async Task CheckServerStatusAsync()
         {
             try
@@ -528,11 +479,9 @@ namespace AMCStore.Notifier
         {
             if (onlineNow == _serverOnline)
             {
-
                 return;
             }
             _serverOnline = onlineNow;
-
 
             if ((DateTime.UtcNow - _lastStatusNotif).TotalSeconds < 20) return;
             _lastStatusNotif = DateTime.UtcNow;
@@ -571,13 +520,11 @@ namespace AMCStore.Notifier
                     if (firstRun) continue;
                     if (!snapshot.TryGetValue(m.Id, out var oldVer))
                     {
-
                         if (NotifyNew(new NotifItem { type = "modlist_new" }, "modlist_new#" + m.Id))
                             NotifyUser("New mod uploaded", $"{m.Name} by @{m.Creator} was added.");
                     }
                     else if (oldVer != m.Version)
                     {
-
                         if (NotifyNew(new NotifItem { type = "modlist_updated" }, "modlist_updated#" + m.Id + "#" + m.Version))
                             NotifyUser("Mod updated", $"{m.Name} changed (v{oldVer} -> v{m.Version}).");
                     }
@@ -725,7 +672,6 @@ namespace AMCStore.Notifier
             catch { }
         }
 
-
         private static bool IsStoreRunning()
         {
             try
@@ -737,7 +683,6 @@ namespace AMCStore.Notifier
             catch { return false; }
         }
 
-
         public static void LaunchStore()
         {
             try
@@ -745,7 +690,6 @@ namespace AMCStore.Notifier
                 var exe = Path.Combine(AppContext.BaseDirectory, NotifierConfig.ExeName);
                 if (!File.Exists(exe))
                 {
-
                     exe = Path.Combine(NotifierConfig.EnvDataDir, NotifierConfig.ExeName);
                 }
                 if (File.Exists(exe))

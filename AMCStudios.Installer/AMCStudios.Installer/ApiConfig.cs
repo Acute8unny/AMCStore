@@ -1,5 +1,3 @@
-using System;
-
 namespace AMCStudios.Installer
 {
     public static class ApiConfig

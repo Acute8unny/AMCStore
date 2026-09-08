@@ -1,7 +1,3 @@
-using System;
-using System.Drawing;
-using System.Threading;
-using System.Windows.Forms;
 using Microsoft.Toolkit.Uwp.Notifications;
 
 namespace AMCStore.Notifier
@@ -15,19 +11,14 @@ namespace AMCStore.Notifier
         private static ToolStripMenuItem _appOpenPrefItem;
         private static bool _toastReady;
 
-
-
         public const string AumId = "AMCStudios.AMCStore";
 
         [STAThread]
         private static void Main()
         {
-
             bool createdNew;
             _mutex = new Mutex(true, "AMCStore.Notifier.Singleton", out createdNew);
             if (!createdNew) return;
-
-
 
             AppDomain.CurrentDomain.UnhandledException += (s, e) =>
                 Log($"Unhandled exception: {e.ExceptionObject}");
@@ -47,6 +38,7 @@ namespace AMCStore.Notifier
         }
 
         private static readonly object LogLock = new object();
+
         private static string LogPath => System.IO.Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "AMCStore", "notifier.log");
 
@@ -68,9 +60,6 @@ namespace AMCStore.Notifier
         {
             try
             {
-
-
-
                 var t = new Thread(() =>
                 {
                     try
@@ -92,7 +81,6 @@ namespace AMCStore.Notifier
         private static NotifyIcon CreateTrayIcon()
         {
             _icon = new NotifyIcon { Visible = true, Text = "AMC Store Notifications" };
-
 
             _icon.Icon = MakeIcon();
             _icon.BalloonTipTitle = "AMC Store";

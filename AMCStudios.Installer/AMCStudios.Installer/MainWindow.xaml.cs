@@ -16,6 +16,7 @@ using System.Windows.Input;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
 using Microsoft.Win32;
+using System.Windows.Media;
 
 namespace AMCStudios.Installer
 {
@@ -30,6 +31,7 @@ namespace AMCStudios.Installer
 
         private readonly Dictionary<string, (PublicUser User, DateTime Fetched)> _userHoverCache =
             new Dictionary<string, (PublicUser, DateTime)>();
+
         private DispatcherTimer _userHoverTimer;
         private string _hoverUserName = "";
 
@@ -44,13 +46,108 @@ namespace AMCStudios.Installer
         private static readonly string[] SortKeys = { "popular", "recent", "rating", "downloads" };
 
         private string _currentGamePath = "Game folder not set.";
+
         public string CurrentGamePath
         {
             get => _currentGamePath;
             set { _currentGamePath = value; OnPropertyChanged(); }
         }
 
+        private void ToggleFullscreen()
+        {
+            if (_isFullscreen) ExitFullscreen(); else EnterFullscreen();
+        }
+
+        private void EnterFullscreen()
+        {
+            if (_isFullscreen) return;
+            _prevWindowState = this.WindowState;
+            _prevTopmost = this.Topmost;
+            _prevResizeMode = this.ResizeMode;
+            _prevLeft = this.Left;
+            _prevTop = this.Top;
+            _prevWidth = this.Width;
+            _prevHeight = this.Height;
+
+            try
+            {
+                this.Topmost = true;
+                this.WindowState = WindowState.Maximized;
+                this.ResizeMode = ResizeMode.NoResize;
+                _isFullscreen = true;
+                var sx = Math.Max(0.5, this.ActualWidth / BaselineWidth);
+                var sy = Math.Max(0.5, this.ActualHeight / BaselineHeight);
+                ResizeBehavior.ApplyScaleToOptedElements(this, sx, sy);
+            }
+            catch { }
+        }
+
+        private void ExitFullscreen()
+        {
+            if (!_isFullscreen) return;
+            try
+            {
+                this.Topmost = _prevTopmost;
+                this.ResizeMode = _prevResizeMode;
+                // from maximized, set normal so that size restore works, got stuck on this for like 5 minutes pulling a blank on why it wouldnt work, what a nightmare -E
+                this.WindowState = WindowState.Normal;
+                if (!double.IsNaN(_prevWidth) && _prevWidth > 0)
+                {
+                    this.Width = _prevWidth;
+                    this.Height = _prevHeight;
+                    this.Left = _prevLeft;
+                    this.Top = _prevTop;
+                }
+                _isFullscreen = false;
+                if (_userResized)
+                {
+                    var sx = Math.Max(0.5, this.ActualWidth / BaselineWidth);
+                    var sy = Math.Max(0.5, this.ActualHeight / BaselineHeight);
+                    ResizeBehavior.ApplyScaleToOptedElements(this, sx, sy);
+                }
+                else
+                {
+                    ResizeBehavior.ClearScale(this);
+                }
+            }
+            catch { }
+        }
+
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            try
+            {
+                if (!_userResized)
+                {
+                    if (e.PreviousSize.Width > 0 && (Math.Abs(e.PreviousSize.Width - e.NewSize.Width) > 1 || Math.Abs(e.PreviousSize.Height - e.NewSize.Height) > 1))
+                    {
+                        _userResized = true;
+                    }
+                }
+
+                if (_userResized)
+                {
+                    var scaleX = Math.Max(0.5, this.ActualWidth / BaselineWidth);
+                    var scaleY = Math.Max(0.5, this.ActualHeight / BaselineHeight);
+                    ResizeBehavior.ApplyScaleToOptedElements(this, scaleX, scaleY);
+                }
+                else
+                {
+                    ResizeBehavior.ClearScale(this);
+                }
+            }
+            catch { }
+        }
+
         public ObservableCollection<InstalledModRow> InstalledView { get; } = new ObservableCollection<InstalledModRow>();
+        private bool _userResized = false;
+        private const double BaselineWidth = 1180.0;
+        private const double BaselineHeight = 720.0;
+        private bool _isFullscreen = false;
+        private WindowState _prevWindowState;
+        private bool _prevTopmost;
+        private ResizeMode _prevResizeMode;
+        private double _prevLeft, _prevTop, _prevWidth, _prevHeight;
 
         public MainWindow()
         {
@@ -65,6 +162,12 @@ namespace AMCStudios.Installer
 
             PreviewKeyDown += (s, e) =>
             {
+                if (e.Key == Key.F11)
+                {
+                    ToggleFullscreen();
+                    e.Handled = true;
+                    return;
+                }
                 if (e.Key != Key.Escape) return;
 
                 if (DialogOverlay.Visibility == Visibility.Visible) return;
@@ -80,6 +183,12 @@ namespace AMCStudios.Installer
                     CloseModDetail();
                     e.Handled = true;
                 }
+            };
+
+            // make it be the basic initial scale that acute chose on boot -E
+            this.Loaded += (s, e) =>
+            {
+                ResizeBehavior.ClearScale(this);
             };
 
             _introFallbackTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(4.5) };
@@ -119,7 +228,6 @@ namespace AMCStudios.Installer
             NavigateTo(LoadingPage);
             try
             {
-
                 string justUpdated = UpdateManager.ConsumeUpdatedFlag();
                 if (justUpdated != null) NotifierBridge.SetUpdateState("idle", "");
 
@@ -186,7 +294,6 @@ namespace AMCStudios.Installer
 
                 NotifierBridge.Update();
                 NotifierBridge.EnsureNotifierRunning();
-
 
                 _ = Task.Run(NotifierBridge.FlashTestNotification);
 
@@ -563,7 +670,6 @@ namespace AMCStudios.Installer
 
         private Task LoadMessageGifsAsync(IEnumerable<CommunityMessage> msgs)
         {
-
             return Task.CompletedTask;
         }
 
@@ -1462,6 +1568,7 @@ namespace AMCStudios.Installer
         private static readonly string[] CategoryKeys = { "", "official", "unverified" };
 
         private void StoreRefresh_Click(object sender, RoutedEventArgs e) => _ = LoadStoreAsync();
+
         private void StoreRetry_Click(object sender, RoutedEventArgs e) => _ = LoadStoreAsync();
 
         private async Task LoadStoreAsync()
@@ -1504,7 +1611,6 @@ namespace AMCStudios.Installer
             }
             catch (OperationCanceledException)
             {
-
             }
             catch (Exception ex)
             {
@@ -1600,7 +1706,6 @@ namespace AMCStudios.Installer
         {
             if (!await EnsureAuthenticatedAsync())
             {
-
                 mod.Liked = _prefs.HasLiked(mod.Id);
                 mod.Disliked = _prefs.HasDisliked(mod.Id);
                 return;
@@ -1930,7 +2035,6 @@ namespace AMCStudios.Installer
 
         private void SetBusyRow(InstalledModRow row, bool busy)
         {
-
             if (row == null) return;
             foreach (var button in FindVisualChildren<System.Windows.Controls.Button>(ModsList))
             {
@@ -1964,7 +2068,6 @@ namespace AMCStudios.Installer
                 }
                 catch
                 {
-
                 }
             }
         }
@@ -2049,7 +2152,9 @@ namespace AMCStudios.Installer
         }
 
         private async void ChangeFolderButton_Click(object sender, RoutedEventArgs e) => await PromptAndSetGamePathAsync();
+
         private async void SelectFolderButton_Click(object sender, RoutedEventArgs e) => await PromptAndSetGamePathAsync();
+
         private async void InstallBepInExButton_Click(object sender, RoutedEventArgs e) => await DownloadAndInstallBepInExFlowAsync();
 
         private async Task DownloadAndInstallBepInExFlowAsync()
@@ -2136,7 +2241,8 @@ namespace AMCStudios.Installer
             if (TopNav.IsEnabled) NavigateTo(_pageBeforeProgress ?? HomePage);
         }
 
-        private enum DialogButtons { Ok, YesNo, RetryExit }
+        private enum DialogButtons
+        { Ok, YesNo, RetryExit }
 
         private TaskCompletionSource<bool> _dialogTcs;
         private TaskCompletionSource<string> _promptTcs;
@@ -2174,10 +2280,12 @@ namespace AMCStudios.Installer
                     AddButton("Yes", true, true);
                     AddButton("No", false, false);
                     break;
+
                 case DialogButtons.RetryExit:
                     AddButton("Retry", true, true);
                     AddButton("Continue Anyway", false, false);
                     break;
+
                 default:
                     AddButton("OK", true, true);
                     break;
@@ -2187,7 +2295,8 @@ namespace AMCStudios.Installer
             return tcs.Task;
         }
 
-        private enum ToastType { Info, Success, Warn, Error }
+        private enum ToastType
+        { Info, Success, Warn, Error }
 
         private void Toast(string title, string message, ToastType type)
         {
@@ -2255,7 +2364,6 @@ namespace AMCStudios.Installer
             }
             catch
             {
-
             }
         }
 
@@ -2495,7 +2603,6 @@ namespace AMCStudios.Installer
 
             if (!started)
             {
-
                 NotifierBridge.SetUpdateState("idle", "");
                 TopNav.IsEnabled = true;
                 ProgressCancelButton.Visibility = Visibility.Visible;
@@ -2522,7 +2629,6 @@ namespace AMCStudios.Installer
                 }
                 else if (_prefs.IsSignedIn)
                 {
-
                     _prefs.SessionToken = "";
                     _prefs.Username = "";
                     _prefs.Save();
@@ -3439,22 +3545,26 @@ namespace AMCStudios.Installer
 
         private void GradPreview_TextChanged(object sender, TextChangedEventArgs e)
         {
-
             if (EditGradABox == null || EditGradBBox == null) return;
             UpdateGradSwatches();
         }
 
         private void UpdateGradSwatches()
         {
-
             if (GradASwatch == null || GradBSwatch == null ||
                 EditGradABox == null || EditGradBBox == null) return;
 
-            try { GradASwatch.Background = new System.Windows.Media.SolidColorBrush(
-                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(EditGradABox.Text)); }
+            try
+            {
+                GradASwatch.Background = new System.Windows.Media.SolidColorBrush(
+                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(EditGradABox.Text));
+            }
             catch { }
-            try { GradBSwatch.Background = new System.Windows.Media.SolidColorBrush(
-                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(EditGradBBox.Text)); }
+            try
+            {
+                GradBSwatch.Background = new System.Windows.Media.SolidColorBrush(
+                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(EditGradBBox.Text));
+            }
             catch { }
         }
 
@@ -3489,6 +3599,7 @@ namespace AMCStudios.Installer
         private sealed class OwnerWindow : System.Windows.Forms.IWin32Window
         {
             public OwnerWindow(IntPtr handle) => Handle = handle;
+
             public IntPtr Handle { get; }
         }
 
@@ -3740,6 +3851,7 @@ namespace AMCStudios.Installer
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
@@ -3787,6 +3899,7 @@ namespace AMCStudios.Installer
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CanEdit)));
             }
         }
+
         private bool _canEdit;
 
         public event PropertyChangedEventHandler PropertyChanged;

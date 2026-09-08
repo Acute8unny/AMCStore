@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using System.Text;
 
@@ -145,8 +144,6 @@ namespace AMCStudios.Installer
                     var json = File.ReadAllText(FilePath, Encoding.UTF8);
                     var parsed = Newtonsoft.Json.Linq.JObject.Parse(json);
 
-
-
                     string Str(params string[] keys)
                     {
                         foreach (var k in keys)
@@ -207,10 +204,6 @@ namespace AMCStudios.Installer
 
         private static void Write(System.Collections.Generic.Dictionary<string, object> data)
         {
-
-
-
-
             Newtonsoft.Json.Linq.JObject obj;
             try
             {

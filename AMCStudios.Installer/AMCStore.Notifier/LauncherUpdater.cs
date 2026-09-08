@@ -1,22 +1,8 @@
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.IO.Compression;
-using System.Linq;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace AMCStore.Notifier
 {
-
-
-
-
-
-
-
     internal static class LauncherUpdater
     {
         private const string ExeName = "AMCStudios.Installer.exe";
@@ -54,7 +40,6 @@ namespace AMCStore.Notifier
             catch { return false; }
         }
 
-
         public static async Task<bool> ApplyAsync(string version, string downloadUrl, Action<string> progressText)
         {
             var tempZip = Path.Combine(Path.GetTempPath(), "AMCStore_update.zip");
@@ -68,7 +53,6 @@ namespace AMCStore.Notifier
                 if (Directory.Exists(extractDir)) Directory.Delete(extractDir, true);
                 Directory.CreateDirectory(extractDir);
                 ZipFile.ExtractToDirectory(tempZip, extractDir, true);
-
 
                 var rootEntries = Directory.GetFileSystemEntries(extractDir);
                 if (rootEntries.Length == 1 && Directory.Exists(rootEntries[0]))

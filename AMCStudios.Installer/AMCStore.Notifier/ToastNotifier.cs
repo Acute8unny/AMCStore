@@ -1,17 +1,10 @@
-using System;
 using Microsoft.Toolkit.Uwp.Notifications;
 
 namespace AMCStore.Notifier
 {
-
-
-
-
-
     public static class ToastNotifier
     {
         private static readonly object Gate = new object();
-
 
         public static bool TryShow(string title, string body)
         {

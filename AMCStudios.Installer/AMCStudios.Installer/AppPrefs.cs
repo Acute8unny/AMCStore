@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using Newtonsoft.Json;
+using System.IO;
 
 namespace AMCStudios.Installer
 {
@@ -54,7 +51,9 @@ namespace AMCStudios.Installer
         public bool IsSignedIn => !string.IsNullOrEmpty(SessionToken) && !string.IsNullOrEmpty(Username);
 
         public bool IsSubscribed(string id) => id != null && SubscribedIds.Contains(id);
+
         public bool HasLiked(string id) => id != null && LikedIds.Contains(id);
+
         public bool HasDisliked(string id) => id != null && DislikedIds.Contains(id);
 
         public void SetSubscribed(string id, bool on)
